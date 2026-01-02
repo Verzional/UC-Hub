@@ -23,8 +23,8 @@ class Company extends Model
         'profile_photo_path',
     ];
 
-    public function jobs()
+    public function employments()
     {
-        return $this->hasMany(Job::class);
+        return $this->hasMany(Employment::class);
     }
 }

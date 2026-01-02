@@ -50,7 +50,7 @@ return new class extends Migration
         Schema::create('skills', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->text('description')->nullable();
+            $table->string('industry');
             $table->timestamps();
         });
 

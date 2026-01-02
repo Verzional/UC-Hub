@@ -38,6 +38,12 @@
                     >
                         Students
                     </x-nav-link>
+                    <x-nav-link
+                        :href="route('skills.index')"
+                        :active="request()->routeIs('skills.*')"
+                    >
+                        Skills
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -150,6 +156,13 @@
                 routeIs('users.*')"
             >
                 Students
+            </x-responsive-nav-link>
+            <x-responsive-nav-link
+                :href="route('skills.index')"
+                :active="request()->
+                routeIs('skills.*')"
+            >
+                Skills
             </x-responsive-nav-link>
         </div>
 

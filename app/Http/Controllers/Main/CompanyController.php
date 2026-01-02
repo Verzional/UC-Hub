@@ -87,7 +87,7 @@ class CompanyController extends Controller
         if ($request->hasFile('profile_photo_path')) {
             // Delete old photo if exists
             if ($company->profile_photo_path) {
-                \Storage::disk('public')->delete($company->profile_photo_path);
+                Storage::disk('public')->delete($company->profile_photo_path);
             }
             $data['profile_photo_path'] = $request->file('profile_photo_path')->store('companies', 'public');
         }

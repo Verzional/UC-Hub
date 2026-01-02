@@ -33,7 +33,7 @@ class SkillController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255|unique:skills',
-            'description' => 'nullable|string',
+            'industry' => 'required|string|max:255',
         ]);
 
         Skill::create($request->all());
@@ -64,7 +64,7 @@ class SkillController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255|unique:skills,name,'.$skill->id,
-            'description' => 'nullable|string',
+            'industry' => 'required|string|max:255',
         ]);
 
         $skill->update($request->all());

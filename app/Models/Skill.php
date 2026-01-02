@@ -16,12 +16,12 @@ class Skill extends Model
      */
     protected $fillable = [
         'name',
-        'description',
+        'industry',
     ];
 
-    public function jobs()
+    public function employments()
     {
-        return $this->belongsToMany(Job::class, 'job_skill');
+        return $this->belongsToMany(Employment::class, 'employment_skill');
     }
 
     public function users()

@@ -47,15 +47,60 @@
 
                         <div class="mb-4">
                             <label for="industry" class="block text-sm font-medium text-gray-700">Industry</label>
-                            <select name="industry" id="industry" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                            <select
+                                name="industry"
+                                id="industry"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                            >
                                 <option value="">Select Industry</option>
-                                <option value="Technology" {{ old('industry', $company->industry) == 'Technology' ? 'selected' : '' }}>Technology</option>
-                                <option value="Healthcare" {{ old('industry', $company->industry) == 'Healthcare' ? 'selected' : '' }}>Healthcare</option>
-                                <option value="Finance" {{ old('industry', $company->industry) == 'Finance' ? 'selected' : '' }}>Finance</option>
-                                <option value="Education" {{ old('industry', $company->industry) == 'Education' ? 'selected' : '' }}>Education</option>
-                                <option value="Manufacturing" {{ old('industry', $company->industry) == 'Manufacturing' ? 'selected' : '' }}>Manufacturing</option>
-                                <option value="Retail" {{ old('industry', $company->industry) == 'Retail' ? 'selected' : '' }}>Retail</option>
-                                <option value="Other" {{ old('industry', $company->industry) == 'Other' ? 'selected' : '' }}>Other</option>
+                                <option
+                                    value="Information Technology"
+                                    {{ old('industry') == 'Information Technology' ? 'selected' : '' }}
+                                >
+                                    Information Technology
+                                </option>
+                                <option
+                                    value="Business Management"
+                                    {{ old('industry') == 'Business Management' ? 'selected' : '' }}
+                                >
+                                    Business Management
+                                </option>
+                                <option
+                                    value="Tourism"
+                                    {{ old('industry') == 'Tourism' ? 'selected' : '' }}
+                                >
+                                    Tourism
+                                </option>
+                                <option
+                                    value="Creative Arts"
+                                    {{ old('industry') == 'Creative Arts' ? 'selected' : '' }}
+                                >
+                                    Creative Arts
+                                </option>
+                                <option
+                                    value="Medical"
+                                    {{ old('industry') == 'Medical' ? 'selected' : '' }}
+                                >
+                                    Medical
+                                </option>
+                                <option
+                                    value="Dental"
+                                    {{ old('industry') == 'Dental' ? 'selected' : '' }}
+                                >
+                                    Dental
+                                </option>
+                                <option
+                                    value="Psychology"
+                                    {{ old('industry') == 'Psychology' ? 'selected' : '' }} 
+                                >
+                                    Psychology
+                                </option>
+                                <option
+                                    value="Communication and Media Business"
+                                    {{ old('industry') == 'Communicationa and Media Business' ? 'selected' : '' }} 
+                                >
+                                    Communication and Media Business
+                                </option>
                             </select>
                             @error('industry')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
