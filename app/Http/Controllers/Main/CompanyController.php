@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Main;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class CompanyController extends Controller
 {
@@ -37,10 +38,16 @@ class CompanyController extends Controller
             'address' => 'nullable|string',
             'website' => 'nullable|url',
             'industry' => 'nullable|string',
-            'profile_photo_path' => 'nullable|string',
+            'profile_photo_path' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        Company::create($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('profile_photo_path')) {
+            $data['profile_photo_path'] = $request->file('profile_photo_path')->store('companies', 'public');
+        }
+
+        Company::create($data);
 
         return redirect()->route('companies.index')->with('success', 'Company created successfully.');
     }
@@ -72,10 +79,20 @@ class CompanyController extends Controller
             'address' => 'nullable|string',
             'website' => 'nullable|url',
             'industry' => 'nullable|string',
-            'profile_photo_path' => 'nullable|string',
+            'profile_photo_path' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $company->update($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('profile_photo_path')) {
+            // Delete old photo if exists
+            if ($company->profile_photo_path) {
+                \Storage::disk('public')->delete($company->profile_photo_path);
+            }
+            $data['profile_photo_path'] = $request->file('profile_photo_path')->store('companies', 'public');
+        }
+
+        $company->update($data);
 
         return redirect()->route('companies.index')->with('success', 'Company updated successfully.');
     }
