@@ -15,29 +15,63 @@
                     >
                         @csrf
 
-                        <div class="mb-4">
+                        <div
+                            class="mb-4"
+                            x-data="{
+                                users: @js($users->toArray()),
+                                selectedUser: @js(old('user_id', '')),
+                                searchUser: '',
+                                openUser: false,
+                                init() {
+                                    if (this.selectedUser) {
+                                        const user = this.users.find((u) => u.id == this.selectedUser)
+                                        if (user) {
+                                            this.searchUser = user.name
+                                        }
+                                    }
+                                },
+                            }"
+                        >
                             <label
                                 for="user_id"
                                 class="block text-sm font-medium text-gray-700"
                             >
                                 User
                             </label>
-                            <select
-                                name="user_id"
-                                id="user_id"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-                                required
-                            >
-                                <option value="">Select User</option>
-                                @foreach ($users as $user)
-                                    <option
-                                        value="{{ $user->id }}"
-                                        {{ old('user_id') == $user->id ? 'selected' : '' }}
+                            <div class="relative">
+                                <input
+                                    type="text"
+                                    x-model="searchUser"
+                                    @focus="openUser = true"
+                                    @blur="openUser = false"
+                                    placeholder="Search and select user..."
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                                    required
+                                />
+                                <ul
+                                    x-show="openUser"
+                                    class="absolute z-10 max-h-60 w-full overflow-y-auto rounded-md border border-gray-300 bg-white shadow-lg"
+                                >
+                                    <template
+                                        x-for="
+                                            user in
+                                                users.filter((u) => u.name.toLowerCase().includes(searchUser.toLowerCase()))
+                                        "
+                                        :key="user.id"
                                     >
-                                        {{ $user->name }}
-                                    </option>
-                                @endforeach
-                            </select>
+                                        <li
+                                            @mousedown.prevent="selectedUser = user.id; searchUser = user.name; openUser = false"
+                                            class="cursor-pointer px-4 py-2 hover:bg-gray-100"
+                                            x-text="user.name"
+                                        ></li>
+                                    </template>
+                                </ul>
+                            </div>
+                            <input
+                                type="hidden"
+                                name="user_id"
+                                x-model="selectedUser"
+                            />
                             @error('user_id')
                                 <p class="mt-1 text-xs text-red-500">
                                     {{ $message }}
@@ -45,29 +79,63 @@
                             @enderror
                         </div>
 
-                        <div class="mb-4">
+                        <div
+                            class="mb-4"
+                            x-data="{
+                                jobs: @js($jobs->toArray()),
+                                selectedJob: @js(old('job_id', '')),
+                                searchJob: '',
+                                openJob: false,
+                                init() {
+                                    if (this.selectedJob) {
+                                        const job = this.jobs.find((j) => j.id == this.selectedJob)
+                                        if (job) {
+                                            this.searchJob = job.title
+                                        }
+                                    }
+                                },
+                            }"
+                        >
                             <label
                                 for="job_id"
                                 class="block text-sm font-medium text-gray-700"
                             >
                                 Job
                             </label>
-                            <select
-                                name="job_id"
-                                id="job_id"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-                                required
-                            >
-                                <option value="">Select Job</option>
-                                @foreach ($jobs as $job)
-                                    <option
-                                        value="{{ $job->id }}"
-                                        {{ old('job_id') == $job->id ? 'selected' : '' }}
+                            <div class="relative">
+                                <input
+                                    type="text"
+                                    x-model="searchJob"
+                                    @focus="openJob = true"
+                                    @blur="openJob = false"
+                                    placeholder="Search and select job..."
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                                    required
+                                />
+                                <ul
+                                    x-show="openJob"
+                                    class="absolute z-10 max-h-60 w-full overflow-y-auto rounded-md border border-gray-300 bg-white shadow-lg"
+                                >
+                                    <template
+                                        x-for="
+                                            job in
+                                                jobs.filter((j) => j.title.toLowerCase().includes(searchJob.toLowerCase()))
+                                        "
+                                        :key="job.id"
                                     >
-                                        {{ $job->title }}
-                                    </option>
-                                @endforeach
-                            </select>
+                                        <li
+                                            @mousedown.prevent="selectedJob = job.id; searchJob = job.title; openJob = false"
+                                            class="cursor-pointer px-4 py-2 hover:bg-gray-100"
+                                            x-text="job.title"
+                                        ></li>
+                                    </template>
+                                </ul>
+                            </div>
+                            <input
+                                type="hidden"
+                                name="job_id"
+                                x-model="selectedJob"
+                            />
                             @error('job_id')
                                 <p class="mt-1 text-xs text-red-500">
                                     {{ $message }}
