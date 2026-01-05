@@ -161,8 +161,7 @@
                                 Salary
                             </label>
                             <input
-                                type="number"
-                                step="0.01"
+                                type="text"
                                 name="salary"
                                 id="salary"
                                 value="{{ old('salary') }}"
@@ -204,7 +203,7 @@
                                 Start Time
                             </label>
                             <input
-                                type="datetime-local"
+                                type="time"
                                 name="start_time"
                                 id="start_time"
                                 value="{{ old('start_time') }}"
@@ -225,13 +224,63 @@
                                 End Time
                             </label>
                             <input
-                                type="datetime-local"
+                                type="time"
                                 name="end_time"
                                 id="end_time"
                                 value="{{ old('end_time') }}"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
                             />
                             @error('end_time')
+                                <p class="mt-1 text-xs text-red-500">
+                                    {{ $message }}
+                                </p>
+                            @enderror
+                        </div>
+
+                        <div class="mb-4" x-data="{ skills: [''] }">
+                            <label
+                                class="block text-sm font-medium text-gray-700"
+                            >
+                                Skills
+                            </label>
+                            <template
+                                x-for="(skill, index) in skills"
+                                :key="index"
+                            >
+                                <div class="mb-2 flex items-center">
+                                    <select
+                                        name="skills[]"
+                                        x-model="skills[index]"
+                                        class="mr-2 flex-1 rounded-md border-gray-300 shadow-sm"
+                                    >
+                                        <option value="">Select Skill</option>
+                                        @foreach ($skills as $skillOption)
+                                            <option
+                                                value="{{ $skillOption->id }}"
+                                            >
+                                                {{ $skillOption->name }}
+                                                ({{ $skillOption->industry }})
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <button
+                                        type="button"
+                                        @click="skills.splice(index, 1)"
+                                        x-show="skills.length > 1"
+                                        class="rounded bg-red-500 px-2 py-1 text-xs text-white hover:bg-red-700"
+                                    >
+                                        Remove
+                                    </button>
+                                </div>
+                            </template>
+                            <button
+                                type="button"
+                                @click="skills.push('')"
+                                class="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
+                            >
+                                Add Skill
+                            </button>
+                            @error('skills')
                                 <p class="mt-1 text-xs text-red-500">
                                     {{ $message }}
                                 </p>

@@ -42,6 +42,29 @@
                             </p>
                         </div>
 
+                        <div class="md:col-span-2">
+                            <h4 class="font-semibold text-gray-700">Jobs</h4>
+                            @if ($skill->jobs->isNotEmpty())
+                                <ul class="list-inside list-disc text-gray-900">
+                                    @foreach ($skill->jobs as $job)
+                                        <li>
+                                            <a
+                                                href="{{ route('jobs.show', $job) }}"
+                                                class="text-blue-600 hover:text-blue-900"
+                                            >
+                                                {{ $job->title }}
+                                            </a>
+                                            at {{ $job->company->name }}
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                <p class="text-gray-900">
+                                    No jobs require this skill.
+                                </p>
+                            @endif
+                        </div>
+
                         <div>
                             <h4 class="font-semibold text-gray-700">
                                 Created At

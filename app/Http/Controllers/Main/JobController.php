@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Main;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\Job;
+use App\Models\Skill;
 use Illuminate\Http\Request;
 
 class JobController extends Controller
@@ -25,8 +26,9 @@ class JobController extends Controller
     public function create()
     {
         $companies = Company::all();
+        $skills = Skill::all();
 
-        return view('main.jobs.create', compact('companies'));
+        return view('main.jobs.create', compact('companies', 'skills'));
     }
 
     /**
@@ -40,15 +42,23 @@ class JobController extends Controller
             'location' => 'nullable|string',
             'company_id' => 'required|exists:companies,id',
             'employment_type' => 'nullable|string',
-            'salary' => 'nullable|numeric',
+            'salary' => 'nullable|string',
             'application_deadline' => 'nullable|date',
-            'start_time' => 'nullable|date',
-            'end_time' => 'nullable|date',
+            'start_time' => 'nullable|date_format:H:i',
+            'end_time' => 'nullable|date_format:H:i',
+            'skills' => 'nullable|array',
+            'skills.*' => 'exists:skills,id',
         ]);
 
-        Job::create($request->all());
+        $job = Job::create($request->all());
 
-        return redirect()->route('jobs.index')->with('success', 'Job created successfully.');
+        if ($request->has('skills')) {
+            $job->skills()->attach($request->skills);
+        }
+
+        return redirect()
+            ->route('jobs.index')
+            ->with('success', 'Job created successfully.');
     }
 
     /**
@@ -56,7 +66,7 @@ class JobController extends Controller
      */
     public function show(Job $job)
     {
-        $job->load('company');
+        $job->load(['company', 'skills']);
 
         return view('main.jobs.show', compact('job'));
     }
@@ -67,8 +77,9 @@ class JobController extends Controller
     public function edit(Job $job)
     {
         $companies = Company::all();
+        $skills = Skill::all();
 
-        return view('main.jobs.edit', compact('job', 'companies'));
+        return view('main.jobs.edit', compact('job', 'companies', 'skills'));
     }
 
     /**
@@ -82,15 +93,21 @@ class JobController extends Controller
             'location' => 'nullable|string',
             'company_id' => 'required|exists:companies,id',
             'employment_type' => 'nullable|string',
-            'salary' => 'nullable|numeric',
+            'salary' => 'nullable|string',
             'application_deadline' => 'nullable|date',
-            'start_time' => 'nullable|date',
-            'end_time' => 'nullable|date',
+            'start_time' => 'nullable|date_format:H:i',
+            'end_time' => 'nullable|date_format:H:i',
+            'skills' => 'nullable|array',
+            'skills.*' => 'exists:skills,id',
         ]);
 
         $job->update($request->all());
 
-        return redirect()->route('jobs.index')->with('success', 'Job updated successfully.');
+        $job->skills()->sync($request->skills ?? []);
+
+        return redirect()
+            ->route('jobs.index')
+            ->with('success', 'Job updated successfully.');
     }
 
     /**
@@ -100,6 +117,8 @@ class JobController extends Controller
     {
         $job->delete();
 
-        return redirect()->route('jobs.index')->with('success', 'Job deleted successfully.');
+        return redirect()
+            ->route('jobs.index')
+            ->with('success', 'Job deleted successfully.');
     }
 }

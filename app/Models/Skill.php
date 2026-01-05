@@ -15,14 +15,16 @@ class Skill extends Model
      *
      * @var list<string>
      */
-    protected $fillable = [
-        'name',
-        'industry',
-    ];
+    protected $fillable = ['name', 'industry'];
 
     public function jobs()
     {
-        return $this->belongsToMany(Job::class, 'employment_skill');
+        return $this->belongsToMany(
+            Job::class,
+            'employment_skill',
+            'skill_id',
+            'employment_id',
+        );
     }
 
     public function users()

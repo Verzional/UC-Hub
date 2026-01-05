@@ -61,7 +61,7 @@
                         <div>
                             <h4 class="font-semibold text-gray-700">Salary</h4>
                             <p class="text-gray-900">
-                                {{ $job->salary ? '$' . number_format($job->salary, 2) : 'N/A' }}
+                                {{ $job->salary ?? 'N/A' }}
                             </p>
                         </div>
 
@@ -70,7 +70,7 @@
                                 Application Deadline
                             </h4>
                             <p class="text-gray-900">
-                                {{ $job->application_deadline ? $job->application_deadline->format('M d, Y') : 'N/A' }}
+                                {{ $job->application_deadline ? \Carbon\Carbon::parse($job->application_deadline)->format('M d, Y') : 'N/A' }}
                             </p>
                         </div>
 
@@ -79,7 +79,7 @@
                                 Start Time
                             </h4>
                             <p class="text-gray-900">
-                                {{ $job->start_time ? $job->start_time->format('M d, Y H:i') : 'N/A' }}
+                                {{ $job->start_time ?? 'N/A' }}
                             </p>
                         </div>
 
@@ -88,7 +88,7 @@
                                 End Time
                             </h4>
                             <p class="text-gray-900">
-                                {{ $job->end_time ? $job->end_time->format('M d, Y H:i') : 'N/A' }}
+                                {{ $job->end_time ?? 'N/A' }}
                             </p>
                         </div>
 
@@ -99,6 +99,24 @@
                             <p class="text-gray-900">
                                 {{ $job->description }}
                             </p>
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <h4 class="font-semibold text-gray-700">Skills</h4>
+                            @if ($job->skills->isNotEmpty())
+                                <ul class="list-inside list-disc text-gray-900">
+                                    @foreach ($job->skills as $skill)
+                                        <li>
+                                            {{ $skill->name }}
+                                            ({{ $skill->industry }})
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                <p class="text-gray-900">
+                                    No skills associated.
+                                </p>
+                            @endif
                         </div>
 
                         <div>

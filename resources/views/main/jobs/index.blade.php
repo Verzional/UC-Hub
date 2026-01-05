@@ -46,6 +46,21 @@
                                 <th
                                     class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                                 >
+                                    Employment Type
+                                </th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                                >
+                                    Salary
+                                </th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                                >
+                                    Application Deadline
+                                </th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                                >
                                     Actions
                                 </th>
                             </tr>
@@ -67,6 +82,21 @@
                                         class="whitespace-nowrap px-6 py-4 text-sm text-gray-500"
                                     >
                                         {{ $job->location ?? 'N/A' }}
+                                    </td>
+                                    <td
+                                        class="whitespace-nowrap px-6 py-4 text-sm text-gray-500"
+                                    >
+                                        {{ $job->employment_type ?? 'N/A' }}
+                                    </td>
+                                    <td
+                                        class="whitespace-nowrap px-6 py-4 text-sm text-gray-500"
+                                    >
+                                        {{ $job->salary ?? 'N/A' }}
+                                    </td>
+                                    <td
+                                        class="whitespace-nowrap px-6 py-4 text-sm text-gray-500"
+                                    >
+                                        {{ $job->application_deadline ? \Carbon\Carbon::parse($job->application_deadline)->format('M d, Y') : 'N/A' }}
                                     </td>
                                     <td
                                         class="whitespace-nowrap px-6 py-4 text-sm font-medium"

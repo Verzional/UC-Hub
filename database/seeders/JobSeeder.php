@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Job;
+use App\Models\Skill;
 use Carbon\Carbon;
 
 class JobSeeder extends Seeder
@@ -419,15 +420,32 @@ class JobSeeder extends Seeder
             ],
         ];
 
-        foreach ($jobs as $job) {
+        $skillIds = Skill::pluck('id')->toArray();
+
+        foreach ($jobs as $jobData) {
             if (
-                !Job::where('title', $job['title'])
-                    ->where('company_id', $job['company_id'])
+                !Job::where('title', $jobData['title'])
+                    ->where('company_id', $jobData['company_id'])
                     ->exists()
             ) {
-                Job::create($job);
+                $job = Job::create($jobData);
+                $randomSkills = collect($skillIds)
+                    ->random(rand(2, 4))
+                    ->toArray();
+                $job->skills()->attach($randomSkills);
             } else {
-                echo "Job '{$job['title']}' for Company ID '{$job['company_id']}' already exists. Skipping...\n";
+                echo "Job '{$jobData['title']}' for Company ID '{$jobData['company_id']}' already exists. Skipping...\n";
+            }
+        }
+
+        // Attach skills to existing jobs that don't have any
+        $allJobs = Job::all();
+        foreach ($allJobs as $job) {
+            if ($job->skills->isEmpty()) {
+                $randomSkills = collect($skillIds)
+                    ->random(min(4, count($skillIds)))
+                    ->toArray();
+                $job->skills()->attach($randomSkills);
             }
         }
     }

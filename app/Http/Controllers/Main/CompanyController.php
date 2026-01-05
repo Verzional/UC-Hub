@@ -38,18 +38,23 @@ class CompanyController extends Controller
             'address' => 'nullable|string',
             'website' => 'nullable|url',
             'industry' => 'nullable|string',
-            'profile_photo_path' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'profile_photo_path' =>
+                'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $data = $request->all();
 
         if ($request->hasFile('profile_photo_path')) {
-            $data['profile_photo_path'] = $request->file('profile_photo_path')->store('companies', 'public');
+            $data['profile_photo_path'] = $request
+                ->file('profile_photo_path')
+                ->store('companies', 'public');
         }
 
         Company::create($data);
 
-        return redirect()->route('companies.index')->with('success', 'Company created successfully.');
+        return redirect()
+            ->route('companies.index')
+            ->with('success', 'Company created successfully.');
     }
 
     /**
@@ -57,6 +62,8 @@ class CompanyController extends Controller
      */
     public function show(Company $company)
     {
+        $company->load('jobs');
+
         return view('main.companies.show', compact('company'));
     }
 
@@ -79,7 +86,8 @@ class CompanyController extends Controller
             'address' => 'nullable|string',
             'website' => 'nullable|url',
             'industry' => 'nullable|string',
-            'profile_photo_path' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'profile_photo_path' =>
+                'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $data = $request->all();
@@ -89,12 +97,16 @@ class CompanyController extends Controller
             if ($company->profile_photo_path) {
                 Storage::disk('public')->delete($company->profile_photo_path);
             }
-            $data['profile_photo_path'] = $request->file('profile_photo_path')->store('companies', 'public');
+            $data['profile_photo_path'] = $request
+                ->file('profile_photo_path')
+                ->store('companies', 'public');
         }
 
         $company->update($data);
 
-        return redirect()->route('companies.index')->with('success', 'Company updated successfully.');
+        return redirect()
+            ->route('companies.index')
+            ->with('success', 'Company updated successfully.');
     }
 
     /**
@@ -104,6 +116,8 @@ class CompanyController extends Controller
     {
         $company->delete();
 
-        return redirect()->route('companies.index')->with('success', 'Company deleted successfully.');
+        return redirect()
+            ->route('companies.index')
+            ->with('success', 'Company deleted successfully.');
     }
 }

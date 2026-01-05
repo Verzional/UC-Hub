@@ -77,6 +77,27 @@
                             </p>
                         </div>
 
+                        <div class="md:col-span-2">
+                            <h4 class="font-semibold text-gray-700">Jobs</h4>
+                            @if ($company->jobs->isNotEmpty())
+                                <ul class="list-inside list-disc text-gray-900">
+                                    @foreach ($company->jobs as $job)
+                                        <li>
+                                            <a
+                                                href="{{ route('jobs.show', $job) }}"
+                                                class="text-blue-600 hover:text-blue-900"
+                                            >
+                                                {{ $job->title }}
+                                            </a>
+                                            - {{ $job->location ?? 'N/A' }}
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                <p class="text-gray-900">No jobs posted.</p>
+                            @endif
+                        </div>
+
                         <div>
                             <h4 class="font-semibold text-gray-700">
                                 Profile Photo

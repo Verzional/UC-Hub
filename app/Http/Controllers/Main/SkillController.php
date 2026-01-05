@@ -38,7 +38,9 @@ class SkillController extends Controller
 
         Skill::create($request->all());
 
-        return redirect()->route('skills.index')->with('success', 'Skill created successfully.');
+        return redirect()
+            ->route('skills.index')
+            ->with('success', 'Skill created successfully.');
     }
 
     /**
@@ -46,6 +48,8 @@ class SkillController extends Controller
      */
     public function show(Skill $skill)
     {
+        $skill->load('jobs');
+
         return view('main.skills.show', compact('skill'));
     }
 
@@ -63,13 +67,16 @@ class SkillController extends Controller
     public function update(Request $request, Skill $skill)
     {
         $request->validate([
-            'name' => 'required|string|max:255|unique:skills,name,'.$skill->id,
+            'name' =>
+                'required|string|max:255|unique:skills,name,' . $skill->id,
             'industry' => 'required|string|max:255',
         ]);
 
         $skill->update($request->all());
 
-        return redirect()->route('skills.index')->with('success', 'Skill updated successfully.');
+        return redirect()
+            ->route('skills.index')
+            ->with('success', 'Skill updated successfully.');
     }
 
     /**
@@ -79,6 +86,8 @@ class SkillController extends Controller
     {
         $skill->delete();
 
-        return redirect()->route('skills.index')->with('success', 'Skill deleted successfully.');
+        return redirect()
+            ->route('skills.index')
+            ->with('success', 'Skill deleted successfully.');
     }
 }
