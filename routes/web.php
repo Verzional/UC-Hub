@@ -1,15 +1,15 @@
 <?php
 
+use App\Http\Controllers\JobRecommendationController;
 use App\Http\Controllers\Main\ApplicationController;
 use App\Http\Controllers\Main\CompanyController;
 use App\Http\Controllers\Main\JobController;
 use App\Http\Controllers\Main\SkillController;
-use App\Http\Controllers\Main\UserController;
-use App\Http\Controllers\Main\SurveyController;
 use App\Http\Controllers\Main\StudentController;
+use App\Http\Controllers\Main\SurveyController;
+use App\Http\Controllers\Main\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentRecommendationController;
-use App\Http\Controllers\JobRecommendationController;
 use Illuminate\Support\Facades\Route;
 
 // Home
@@ -19,9 +19,10 @@ Route::get('/', function () {
 
 // Dashboard
 Route::get('/dashboard', function () {
-    if (!auth()->user()->survey) {
+    if (! auth()->user()->survey) {
         return redirect()->route('surveys.create');
     }
+
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -50,6 +51,10 @@ Route::resource('/students', StudentController::class, ['only' => ['index', 'sho
     ->middleware(['auth', 'verified']);
 Route::resource('/surveys', SurveyController::class)
     ->middleware(['auth', 'verified']);
+
+// Student Routes
+Route::get('/students/jobs', [JobRecommendationController::class, 'index'])->name('students.jobs.index')->middleware(['auth', 'verified', 'role:student']);
+Route::get('/students/jobs/{job}', [JobRecommendationController::class, 'show'])->name('students.jobs.show')->middleware(['auth', 'verified', 'role:student']);
 
 // Admin Routes
 Route::resource('/admin/users', UserController::class)

@@ -21,16 +21,22 @@
                         Dashboard
                     </x-nav-link>
                     <x-nav-link
+                        :href="route('students.index')"
+                        :active="request()->routeIs('students.*')"
+                    >
+                        Students
+                    </x-nav-link>
+                    <x-nav-link
+                        :href="route('students.jobs.index')"
+                        :active="request()->routeIs('students.jobs.*')"
+                    >
+                        My Jobs
+                    </x-nav-link>
+                    <x-nav-link
                         :href="route('recommend.jobs')"
                         :active="request()->routeIs('recommend.jobs')"
                     >
                         Job Recommendations
-                    </x-nav-link>
-                    <x-nav-link
-                        :href="route('skills.index')"
-                        :active="request()->routeIs('skills.*')"
-                    >
-                        Skills
                     </x-nav-link>
                 </div>
             </div>
@@ -80,11 +86,14 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 Dashboard
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('students.index')" :active="request()->routeIs('students.*')">
+                Students
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('students.jobs.index')" :active="request()->routeIs('students.jobs.*')">
+                My Jobs
+            </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('recommend.jobs')" :active="request()->routeIs('recommend.jobs')">
                 Job Recommendations
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('skills.index')" :active="request()->routeIs('skills.*')">
-                Skills
             </x-responsive-nav-link>
         </div>
 
