@@ -19,10 +19,8 @@ class SurveyController extends Controller
         }
 
         $skills = Skill::all();
-        $companies = Company::all();
-        $industries = ['Technology', 'Finance', 'Healthcare', 'Education', 'Manufacturing', 'Retail', 'Consulting', 'Other']; // Hardcoded industries
 
-        return view('main.surveys.create', compact('skills', 'companies', 'industries'));
+        return view('main.surveys.create', compact('skills'));
     }
 
     public function store(Request $request)
@@ -32,8 +30,8 @@ class SurveyController extends Controller
             'cgpa' => 'required|numeric|min:0|max:4',
             'skills' => 'required|array|min:1|max:5',
             'skills.*' => 'exists:skills,id',
-            'companies' => 'array',
-            'companies.*' => 'exists:companies,id',
+            'wishlists' => 'array',
+            'wishlists.*' => 'string|max:255',
         ]);
 
         $user = Auth::user();
@@ -51,9 +49,16 @@ class SurveyController extends Controller
         // Attach skills to user
         $user->skills()->syncWithoutDetaching($request->skills);
 
-        // Attach companies to survey
-        if ($request->companies) {
-            $survey->companies()->attach($request->companies);
+        // Create wishlists
+        if ($request->wishlists) {
+            foreach ($request->wishlists as $companyName) {
+                if (!empty($companyName)) {
+                    Wishlist::create([
+                        'survey_id' => $survey->id,
+                        'company_name' => $companyName,
+                    ]);
+                }
+            }
         }
 
         return redirect()->route('dashboard')->with('success', 'Survey completed successfully!');

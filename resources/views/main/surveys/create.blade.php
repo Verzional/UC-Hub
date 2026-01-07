@@ -26,14 +26,14 @@
                                 required
                             >
                                 <option value="">Select Industry</option>
-                                @foreach($industries as $industry)
-                                    <option
-                                        value="{{ $industry }}"
-                                        {{ old('primary_interest') == $industry ? 'selected' : '' }}
-                                    >
-                                        {{ $industry }}
-                                    </option>
-                                @endforeach
+                                <option value="Technology" {{ old('primary_interest') == 'Technology' ? 'selected' : '' }}>Technology</option>
+                                <option value="Finance" {{ old('primary_interest') == 'Finance' ? 'selected' : '' }}>Finance</option>
+                                <option value="Healthcare" {{ old('primary_interest') == 'Healthcare' ? 'selected' : '' }}>Healthcare</option>
+                                <option value="Education" {{ old('primary_interest') == 'Education' ? 'selected' : '' }}>Education</option>
+                                <option value="Manufacturing" {{ old('primary_interest') == 'Manufacturing' ? 'selected' : '' }}>Manufacturing</option>
+                                <option value="Retail" {{ old('primary_interest') == 'Retail' ? 'selected' : '' }}>Retail</option>
+                                <option value="Consulting" {{ old('primary_interest') == 'Consulting' ? 'selected' : '' }}>Consulting</option>
+                                <option value="Other" {{ old('primary_interest') == 'Other' ? 'selected' : '' }}>Other</option>
                             </select>
                             @error('primary_interest')
                                 <p class="mt-1 text-xs text-red-500">
@@ -162,23 +162,7 @@
                         <div
                             class="mb-4"
                             x-data="{
-                                companies: @js($companies->toArray()),
-                                selectedCompanies: @js(old('companies', [''])),
-                                searchCompanies: @js(array_fill(0, count(old('companies', [''])), '')),
-                                openCompanies: @js(array_fill(0, count(old('companies', [''])), false)),
-                                updateSearchCompany(index) {
-                                    if (this.selectedCompanies[index]) {
-                                        const company = this.companies.find((c) => c.id == this.selectedCompanies[index])
-                                        if (company) {
-                                            this.searchCompanies[index] = company.name
-                                        }
-                                    }
-                                },
-                                init() {
-                                    for (let i = 0; i < this.selectedCompanies.length; i++) {
-                                        this.updateSearchCompany(i);
-                                    }
-                                }
+                                wishlists: @js(old('wishlists', [''])),
                             }"
                         >
                             <label
@@ -187,47 +171,25 @@
                                 Company Wishlists
                             </label>
                             <template
-                                x-for="(company, index) in selectedCompanies"
+                                x-for="(wishlist, index) in wishlists"
                                 :key="index"
                             >
                                 <div class="flex items-center mb-2">
-                                    <div class="relative flex-1">
-                                        <input
-                                            type="text"
-                                            x-model="searchCompanies[index]"
-                                            @focus="openCompanies[index] = true"
-                                            @blur="openCompanies[index] = false"
-                                            placeholder="Search and select company..."
-                                            class="block w-full rounded-md border-gray-300 shadow-sm"
-                                        />
-                                        <ul
-                                            x-show="openCompanies[index]"
-                                            class="absolute z-10 max-h-60 w-full overflow-y-auto rounded-md border border-gray-300 bg-white shadow-lg"
-                                        >
-                                            <template
-                                                x-for="companyOption in companies.filter((c) =>
-                                                    c.name.toLowerCase().includes(searchCompanies[index].toLowerCase()) ||
-                                                    c.industry.toLowerCase().includes(searchCompanies[index].toLowerCase())
-                                                )"
-                                                :key="companyOption.id"
-                                            >
-                                                <li
-                                                    @mousedown.prevent="selectedCompanies[index] = companyOption.id; searchCompanies[index] = companyOption.name; openCompanies[index] = false"
-                                                    class="cursor-pointer px-4 py-2 hover:bg-gray-100"
-                                                    x-text="companyOption.name + ' (' + companyOption.industry + ')'"
-                                                ></li>
-                                            </template>
-                                        </ul>
-                                    </div>
+                                    <input
+                                        type="text"
+                                        x-model="wishlists[index]"
+                                        placeholder="Enter company name..."
+                                        class="block w-full rounded-md border-gray-300 shadow-sm flex-1"
+                                    />
                                     <input
                                         type="hidden"
-                                        :name="'companies[' + index + ']'"
-                                        x-model="selectedCompanies[index]"
+                                        :name="'wishlists[' + index + ']'"
+                                        x-model="wishlists[index]"
                                     />
                                     <button
                                         type="button"
-                                        @click="selectedCompanies.splice(index, 1); searchCompanies.splice(index, 1); openCompanies.splice(index, 1)"
-                                        x-show="selectedCompanies.length > 1"
+                                        @click="wishlists.splice(index, 1)"
+                                        x-show="wishlists.length > 1"
                                         class="ml-2 rounded bg-red-500 px-2 py-1 text-xs text-white hover:bg-red-700"
                                     >
                                         Remove
@@ -236,12 +198,12 @@
                             </template>
                             <button
                                 type="button"
-                                @click="selectedCompanies.push(''); searchCompanies.push(''); openCompanies.push(false)"
+                                @click="wishlists.push('')"
                                 class="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
                             >
                                 Add Company
                             </button>
-                            @error('companies')
+                            @error('wishlists')
                                 <p class="mt-1 text-xs text-red-500">
                                     {{ $message }}
                                 </p>
