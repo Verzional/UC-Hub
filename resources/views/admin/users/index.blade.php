@@ -10,7 +10,7 @@
                     <div class="mb-4 flex items-center justify-between">
                         <h3 class="text-lg font-medium">Users List</h3>
                         <a
-                            href="{{ route('users.create') }}"
+                            href="{{ route('admin.users.create') }}"
                             class="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
                         >
                             Add New User
@@ -76,26 +76,26 @@
                                     <td
                                         class="whitespace-nowrap px-6 py-4 text-sm text-gray-500"
                                     >
-                                        {{ $user->role ?? 'Student' }}
+                                        {{ $user->role ?? 'student' }}
                                     </td>
                                     <td
                                         class="whitespace-nowrap px-6 py-4 text-sm font-medium"
                                     >
                                         <a
-                                            href="{{ route('users.show', $user) }}"
+                                            href="{{ route('admin.users.show', $user) }}"
                                             class="mr-2 text-indigo-600 hover:text-indigo-900"
                                         >
                                             View
                                         </a>
                                         <a
-                                            href="{{ route('users.edit', $user) }}"
+                                            href="{{ route('admin.users.edit', $user) }}"
                                             class="mr-2 text-indigo-600 hover:text-indigo-900"
                                         >
                                             Edit
                                         </a>
                                         <form
                                             method="POST"
-                                            action="{{ route('users.destroy', $user) }}"
+                                            action="{{ route('admin.users.destroy', $user) }}"
                                             class="inline"
                                         >
                                             @csrf
