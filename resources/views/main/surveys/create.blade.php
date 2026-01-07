@@ -26,14 +26,14 @@
                                 required
                             >
                                 <option value="">Select Industry</option>
-                                @foreach($industries as $industry)
-                                    <option
-                                        value="{{ $industry }}"
-                                        {{ old('primary_interest') == $industry ? 'selected' : '' }}
-                                    >
-                                        {{ $industry }}
-                                    </option>
-                                @endforeach
+                                <option value="Technology" {{ old('primary_interest') == 'Technology' ? 'selected' : '' }}>Technology</option>
+                                <option value="Finance" {{ old('primary_interest') == 'Finance' ? 'selected' : '' }}>Finance</option>
+                                <option value="Healthcare" {{ old('primary_interest') == 'Healthcare' ? 'selected' : '' }}>Healthcare</option>
+                                <option value="Education" {{ old('primary_interest') == 'Education' ? 'selected' : '' }}>Education</option>
+                                <option value="Manufacturing" {{ old('primary_interest') == 'Manufacturing' ? 'selected' : '' }}>Manufacturing</option>
+                                <option value="Retail" {{ old('primary_interest') == 'Retail' ? 'selected' : '' }}>Retail</option>
+                                <option value="Consulting" {{ old('primary_interest') == 'Consulting' ? 'selected' : '' }}>Consulting</option>
+                                <option value="Other" {{ old('primary_interest') == 'Other' ? 'selected' : '' }}>Other</option>
                             </select>
                             @error('primary_interest')
                                 <p class="mt-1 text-xs text-red-500">
@@ -71,9 +71,9 @@
                             class="mb-4"
                             x-data="{
                                 allSkills: @js($skills->toArray()),
-                                skills: @js(old('skills', ['', '', '', '', ''])),
-                                searchSkills: @js(array_fill(0, 5, '')),
-                                openSkills: @js(array_fill(0, 5, false)),
+                                skills: @js(old('skills', [''])),
+                                searchSkills: @js(array_fill(0, count(old('skills', [''])), '')),
+                                openSkills: @js(array_fill(0, count(old('skills', [''])), false)),
                                 updateSearchSkill(index) {
                                     if (this.skills[index]) {
                                         const skill = this.allSkills.find((s) => s.id == this.skills[index])
@@ -93,14 +93,14 @@
                             <label
                                 class="block text-sm font-medium text-gray-700"
                             >
-                                Skills (Select 5)
+                                Skills (Max 5)
                             </label>
                             <template
                                 x-for="(skill, index) in skills"
                                 :key="index"
                             >
-                                <div class="mb-2">
-                                    <div class="relative">
+                                <div class="flex items-center mb-2">
+                                    <div class="relative flex-1">
                                         <input
                                             type="text"
                                             x-model="searchSkills[index]"
@@ -134,8 +134,24 @@
                                         :name="'skills[' + index + ']'"
                                         x-model="skills[index]"
                                     />
+                                    <button
+                                        type="button"
+                                        @click="skills.splice(index, 1); searchSkills.splice(index, 1); openSkills.splice(index, 1)"
+                                        x-show="skills.length > 1"
+                                        class="ml-2 rounded bg-red-500 px-2 py-1 text-xs text-white hover:bg-red-700"
+                                    >
+                                        Remove
+                                    </button>
                                 </div>
                             </template>
+                            <button
+                                type="button"
+                                @click="if (skills.length < 5) { skills.push(''); searchSkills.push(''); openSkills.push(false); }"
+                                :disabled="skills.length >= 5"
+                                class="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700 disabled:bg-gray-400"
+                            >
+                                Add Skill
+                            </button>
                             @error('skills')
                                 <p class="mt-1 text-xs text-red-500">
                                     {{ $message }}
@@ -146,23 +162,7 @@
                         <div
                             class="mb-4"
                             x-data="{
-                                companies: @js($companies->toArray()),
-                                selectedCompanies: @js(old('companies', [''])),
-                                searchCompanies: @js(array_fill(0, count(old('companies', [''])), '')),
-                                openCompanies: @js(array_fill(0, count(old('companies', [''])), false)),
-                                updateSearchCompany(index) {
-                                    if (this.selectedCompanies[index]) {
-                                        const company = this.companies.find((c) => c.id == this.selectedCompanies[index])
-                                        if (company) {
-                                            this.searchCompanies[index] = company.name
-                                        }
-                                    }
-                                },
-                                init() {
-                                    for (let i = 0; i < this.selectedCompanies.length; i++) {
-                                        this.updateSearchCompany(i);
-                                    }
-                                }
+                                wishlists: @js(old('wishlists', [''])),
                             }"
                         >
                             <label
@@ -171,48 +171,26 @@
                                 Company Wishlists
                             </label>
                             <template
-                                x-for="(company, index) in selectedCompanies"
+                                x-for="(wishlist, index) in wishlists"
                                 :key="index"
                             >
-                                <div class="mb-2">
-                                    <div class="relative">
-                                        <input
-                                            type="text"
-                                            x-model="searchCompanies[index]"
-                                            @focus="openCompanies[index] = true"
-                                            @blur="openCompanies[index] = false"
-                                            placeholder="Search and select company..."
-                                            class="block w-full rounded-md border-gray-300 shadow-sm"
-                                        />
-                                        <ul
-                                            x-show="openCompanies[index]"
-                                            class="absolute z-10 max-h-60 w-full overflow-y-auto rounded-md border border-gray-300 bg-white shadow-lg"
-                                        >
-                                            <template
-                                                x-for="companyOption in companies.filter((c) =>
-                                                    c.name.toLowerCase().includes(searchCompanies[index].toLowerCase()) ||
-                                                    c.industry.toLowerCase().includes(searchCompanies[index].toLowerCase())
-                                                )"
-                                                :key="companyOption.id"
-                                            >
-                                                <li
-                                                    @mousedown.prevent="selectedCompanies[index] = companyOption.id; searchCompanies[index] = companyOption.name; openCompanies[index] = false"
-                                                    class="cursor-pointer px-4 py-2 hover:bg-gray-100"
-                                                    x-text="companyOption.name + ' (' + companyOption.industry + ')'"
-                                                ></li>
-                                            </template>
-                                        </ul>
-                                    </div>
+                                <div class="flex items-center mb-2">
+                                    <input
+                                        type="text"
+                                        x-model="wishlists[index]"
+                                        placeholder="Enter company name..."
+                                        class="block w-full rounded-md border-gray-300 shadow-sm flex-1"
+                                    />
                                     <input
                                         type="hidden"
-                                        :name="'companies[' + index + ']'"
-                                        x-model="selectedCompanies[index]"
+                                        :name="'wishlists[' + index + ']'"
+                                        x-model="wishlists[index]"
                                     />
                                     <button
                                         type="button"
-                                        @click="selectedCompanies.splice(index, 1); searchCompanies.splice(index, 1); openCompanies.splice(index, 1)"
-                                        x-show="selectedCompanies.length > 1"
-                                        class="mt-1 rounded bg-red-500 px-2 py-1 text-xs text-white hover:bg-red-700"
+                                        @click="wishlists.splice(index, 1)"
+                                        x-show="wishlists.length > 1"
+                                        class="ml-2 rounded bg-red-500 px-2 py-1 text-xs text-white hover:bg-red-700"
                                     >
                                         Remove
                                     </button>
@@ -220,12 +198,12 @@
                             </template>
                             <button
                                 type="button"
-                                @click="selectedCompanies.push(''); searchCompanies.push(''); openCompanies.push(false)"
+                                @click="wishlists.push('')"
                                 class="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
                             >
                                 Add Company
                             </button>
-                            @error('companies')
+                            @error('wishlists')
                                 <p class="mt-1 text-xs text-red-500">
                                     {{ $message }}
                                 </p>

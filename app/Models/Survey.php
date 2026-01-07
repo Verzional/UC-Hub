@@ -22,8 +22,8 @@ class Survey extends Model
         return $this->belongsToMany(Skill::class);
     }
 
-    public function companies()
+    public function wishlists()
     {
-        return $this->belongsToMany(Company::class, 'survey_company');
+        return $this->hasMany(Wishlist::class);
     }
 }
