@@ -5,6 +5,8 @@ use App\Http\Controllers\Main\CompanyController;
 use App\Http\Controllers\Main\JobController;
 use App\Http\Controllers\Main\SkillController;
 use App\Http\Controllers\Main\UserController;
+use App\Http\Controllers\Main\SurveyController;
+use App\Http\Controllers\Main\StudentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentRecommendationController;
 use App\Http\Controllers\JobRecommendationController;
@@ -44,10 +46,14 @@ Route::resource('/jobs', JobController::class)
     ->middleware(['auth', 'verified', 'role:ice']);
 Route::resource('/skills', SkillController::class)
     ->middleware(['auth', 'verified', 'role:ice']);
-Route::resource('/users', UserController::class)
-    ->middleware(['auth', 'verified', 'role:ice']);
-Route::resource('/surveys', \App\Http\Controllers\Main\SurveyController::class)
+Route::resource('/students', StudentController::class, ['only' => ['index', 'show']])
     ->middleware(['auth', 'verified']);
+Route::resource('/surveys', SurveyController::class)
+    ->middleware(['auth', 'verified']);
+
+// Admin Routes
+Route::resource('/admin/users', UserController::class)
+    ->middleware(['auth', 'verified', 'role:admin']);
 
 // Recommendation Routes
 Route::middleware(['auth', 'verified'])->group(function () {

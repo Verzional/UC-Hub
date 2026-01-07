@@ -16,7 +16,7 @@ class UserController extends Controller
     {
         $users = User::all();
 
-        return view('main.users.index', compact('users'));
+        return view('admin.users.index', compact('users'));
     }
 
     /**
@@ -24,7 +24,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('main.users.create');
+        return view('admin.users.create');
     }
 
     /**
@@ -43,7 +43,7 @@ class UserController extends Controller
             'profile_photo_path' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'cv_path' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
             'portfolio_path' => 'nullable|string|max:255',
-            'role' => 'required|string|in:Student,ICE,Admin',
+            'role' => 'required|string|in:student,ice,admin',
         ]);
 
         $data = [
@@ -68,7 +68,7 @@ class UserController extends Controller
 
         User::create($data);
 
-        return redirect()->route('users.index')->with('success', 'User created successfully.');
+        return redirect()->route('admin.users.index')->with('success', 'User created successfully.');
     }
 
     /**
@@ -76,7 +76,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return view('main.users.show', compact('user'));
+        return view('admin.users.show', compact('user'));
     }
 
     /**
@@ -84,7 +84,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('main.users.edit', compact('user'));
+        return view('admin.users.edit', compact('user'));
     }
 
     /**
@@ -103,7 +103,7 @@ class UserController extends Controller
             'profile_photo_path' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'cv_path' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
             'portfolio_path' => 'nullable|string|max:255',
-            'role' => 'required|string|in:Student,ICE,Admin',
+            'role' => 'required|string|in:student,ice,admin',
         ]);
 
         $data = [
@@ -137,7 +137,7 @@ class UserController extends Controller
 
         $user->update($data);
 
-        return redirect()->route('users.index')->with('success', 'User updated successfully.');
+        return redirect()->route('admin.users.index')->with('success', 'User updated successfully.');
     }
 
     /**
@@ -147,6 +147,6 @@ class UserController extends Controller
     {
         $user->delete();
 
-        return redirect()->route('users.index')->with('success', 'User deleted successfully.');
+        return redirect()->route('admin.users.index')->with('success', 'User deleted successfully.');
     }
 }
