@@ -34,6 +34,7 @@ class Skill extends Model
 
     public function surveys()
     {
-        return $this->belongsToMany(Survey::class);
+        return $this->belongsToMany(Survey::class,
+        'survey_skill');
     }
 }

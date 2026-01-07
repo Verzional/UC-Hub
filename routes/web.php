@@ -5,6 +5,7 @@ use App\Http\Controllers\Main\CompanyController;
 use App\Http\Controllers\Main\JobController;
 use App\Http\Controllers\Main\SkillController;
 use App\Http\Controllers\Main\UserController;
+use App\Http\Controllers\Main\SurveyController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,7 +16,9 @@ Route::get('/', function () {
 
 // Dashboard
 Route::get('/dashboard', function () {
-    if (!auth()->user()->survey) {
+    $user = request()->user();
+
+    if (!$user->survey) {
         return redirect()->route('surveys.create');
     }
     return view('dashboard');
@@ -31,6 +34,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/survey', [SurveyController::class, 'create'])->name('surveys.create');
+    Route::post('/survey', [SurveyController::class, 'store'])->name('surveys.store');
 });
 
 // Resource Routes
@@ -44,7 +49,7 @@ Route::resource('/skills', SkillController::class)
     ->middleware(['auth', 'verified', 'role:ICE']);
 Route::resource('/users', UserController::class)
     ->middleware(['auth', 'verified', 'role:ICE']);
-Route::resource('/surveys', \App\Http\Controllers\Main\SurveyController::class)
+Route::resource('/surveys', SurveyController::class)
     ->middleware(['auth', 'verified']);
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
