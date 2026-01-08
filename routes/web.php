@@ -10,6 +10,7 @@ use App\Http\Controllers\Main\SurveyController;
 use App\Http\Controllers\Main\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentRecommendationController;
+use App\Http\Controllers\Main\ICEDashboardController;
 use Illuminate\Support\Facades\Route;
 
 // Home
@@ -68,4 +69,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/recommend-jobs', [JobRecommendationController::class, 'recommendForUser'])->name('recommend.jobs');
 });
 
+// ICE Routes Group 
+Route::get('/ice/dashboard', [ICEDashboardController::class, 'index'])
+    ->name('main.ice.dashboard');
 require __DIR__.'/auth.php';
