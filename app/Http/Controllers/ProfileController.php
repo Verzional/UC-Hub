@@ -18,9 +18,13 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        $user = $request->user();
+
+    if ($user->role === 'ICE') {
+        return view('profile.ice.edit', compact('user'));
+    }
+
+    return view('profile.student.edit', compact('user'));
     }
 
     /**
