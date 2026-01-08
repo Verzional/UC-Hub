@@ -15,8 +15,7 @@ class StudentRecommendationController extends Controller
 
     public function recommendForJob(Job $job)
     {
-        $recommendations = $this->studentRecommendationService->recommendForJob($job);
-
-        return view('main.recommendations.students', compact('job', 'recommendations'));
+        // Recommendations are now displayed directly on the job show page
+        return redirect()->route('jobs.show', $job);
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\Job;
 use App\Models\Skill;
+use App\Services\StudentRecommendationService;
 use Illuminate\Http\Request;
 
 class JobController extends Controller
@@ -84,11 +85,14 @@ class JobController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Job $job)
+    public function show(Job $job, StudentRecommendationService $studentRecommendationService)
     {
         $job->load(['company', 'skills']);
+        
+        // Get recommended students for this job
+        $recommendations = $studentRecommendationService->recommendForJob($job);
 
-        return view('main.jobs.show', compact('job'));
+        return view('main.jobs.show', compact('job', 'recommendations'));
     }
 
     /**

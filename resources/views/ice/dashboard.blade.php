@@ -77,7 +77,7 @@
             </div>
 
             {{-- Tabs Section --}}
-            <div x-data="{ tab: 'companies', openCompanyModal: false, openJobModal: false }" class="bg-white rounded-2xl shadow-md overflow-hidden">
+            <div x-data="{ tab: '{{ $currentContext ?? 'companies' }}', openCompanyModal: false, openJobModal: false }" class="bg-white rounded-2xl shadow-md overflow-hidden">
                 
                 {{-- Tab Headers --}}
                 <div class="border-b border-gray-200 bg-gray-50">
@@ -105,6 +105,54 @@
                     </nav>
                 </div>
 
+                {{-- Context-Aware Search Bar --}}
+                <div class="p-6 border-b border-gray-200 bg-gray-50">
+                    <form action="{{ route('ice.dashboard') }}" method="GET" class="relative" x-data="{ currentTab: tab }" x-init="$watch('tab', value => currentTab = value)">
+                        <input type="hidden" name="context" :value="tab">
+                        <div class="flex gap-3">
+                            <div class="flex-1 relative">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                    </svg>
+                                </div>
+                                <input 
+                                    type="text" 
+                                    name="search" 
+                                    value="{{ request('search') }}"
+                                    x-bind:placeholder="
+                                        tab === 'companies' ? 'Search companies by name, industry, address...' :
+                                        tab === 'jobs' ? 'Search jobs by title, company, location...' :
+                                        tab === 'applications' ? 'Search by student name, email, job, company...' :
+                                        'Search students by name, email, major...'
+                                    "
+                                    class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition duration-200"
+                                >
+                            </div>
+                            <button 
+                                type="submit"
+                                class="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-xl transition duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                            >
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
+                                <span class="hidden md:inline">Search</span>
+                            </button>
+                            @if(request('search'))
+                                <a 
+                                    href="{{ route('ice.dashboard') }}"
+                                    class="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold rounded-xl transition duration-300 flex items-center justify-center gap-2"
+                                >
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                    <span class="hidden md:inline">Clear</span>
+                                </a>
+                            @endif
+                        </div>
+                    </form>
+                </div>
+
                 {{-- Tab Content --}}
                 <div class="p-6"
 
@@ -130,9 +178,6 @@
                         @if($topSurveyCompanies->count() > 0)
                             <div class="mb-8">
                                 <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center gap-2">
-                                    <svg class="w-5 h-5 text-orange-500" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                                    </svg>
                                     Top Wishlisted Companies
                                 </h4>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -359,21 +404,21 @@
                     {{-- Students Tab --}}
                     <div x-show="tab === 'students'" x-transition>
                         <div class="mb-6">
-                            <h3 class="text-xl font-semibold text-gray-800">Student Surveys</h3>
-                            <p class="text-sm text-gray-500 mt-1">View student profiles and their preferences</p>
+                            <h3 class="text-xl font-semibold text-gray-800">Students</h3>
+                            <p class="text-sm text-gray-500 mt-1">View student profiles and their information</p>
                         </div>
 
-                        @if ($surveys->isEmpty())
+                        @if ($students->isEmpty())
                             <div class="text-center py-12">
                                 <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
                                 </svg>
-                                <p class="text-gray-500 text-lg">No surveys available</p>
+                                <p class="text-gray-500 text-lg">No students found</p>
                             </div>
                         @else
                             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                                @foreach ($surveys as $survey)
-                                    <div class="rounded-2xl bg-white p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-200">
+                                @foreach ($students as $student)
+                                    <a href="{{ route('students.show', $student) }}" class="rounded-2xl bg-white p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-200 hover:border-purple-300">
                                         <div class="flex items-center gap-3 mb-4">
                                             <div class="bg-purple-100 p-3 rounded-full">
                                                 <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -381,40 +426,32 @@
                                                 </svg>
                                             </div>
                                             <div class="flex-1">
-                                                <h4 class="font-semibold text-gray-800">{{ $survey->user->name ?? 'Unknown Student' }}</h4>
-                                                <p class="text-xs text-gray-500">{{ $survey->user->email ?? '' }}</p>
+                                                <h4 class="font-semibold text-gray-800">{{ $student->name }}</h4>
+                                                <p class="text-xs text-gray-500">{{ $student->email }}</p>
                                             </div>
                                         </div>
 
-                                        <div class="space-y-2 mb-4">
-                                            <div class="flex items-center gap-2 text-sm">
-                                                <span class="text-gray-500">Primary Interest:</span>
-                                                <span class="font-medium text-gray-800">{{ $survey->primary_interest ?? 'N/A' }}</span>
-                                            </div>
-                                            <div class="flex items-center gap-2 text-sm">
-                                                <span class="text-gray-500">CGPA:</span>
-                                                <span class="font-medium text-gray-800">{{ $survey->cgpa }}</span>
-                                            </div>
-                                        </div>
-
-                                        @if ($survey->wishlists->isNotEmpty())
-                                            <div class="border-t pt-3">
-                                                <p class="text-xs font-semibold text-gray-600 mb-2">Wishlist Companies:</p>
-                                                <div class="flex flex-wrap gap-1">
-                                                    @foreach ($survey->wishlists->take(3) as $wishlist)
-                                                        <span class="px-2 py-1 bg-orange-50 text-orange-700 rounded-full text-xs">
-                                                            {{ $wishlist->company_name ?? 'N/A' }}
-                                                        </span>
-                                                    @endforeach
-                                                    @if($survey->wishlists->count() > 3)
-                                                        <span class="px-2 py-1 bg-gray-100 text-gray-600 rounded-full text-xs">
-                                                            +{{ $survey->wishlists->count() - 3 }}
-                                                        </span>
-                                                    @endif
+                                        <div class="space-y-2">
+                                            @if($student->student_id)
+                                                <div class="flex items-center gap-2 text-sm">
+                                                    <span class="text-gray-500">ID:</span>
+                                                    <span class="font-medium text-gray-800">{{ $student->student_id }}</span>
                                                 </div>
-                                            </div>
-                                        @endif
-                                    </div>
+                                            @endif
+                                            @if($student->major)
+                                                <div class="flex items-center gap-2 text-sm">
+                                                    <span class="text-gray-500">Major:</span>
+                                                    <span class="font-medium text-gray-800">{{ $student->major }}</span>
+                                                </div>
+                                            @endif
+                                            @if($student->cgpa)
+                                                <div class="flex items-center gap-2 text-sm">
+                                                    <span class="text-gray-500">CGPA:</span>
+                                                    <span class="font-medium text-gray-800">{{ $student->cgpa }}</span>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </a>
                                 @endforeach
                             </div>
                         @endif
