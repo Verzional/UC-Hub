@@ -45,9 +45,9 @@ Route::middleware('auth')->group(function () {
 Route::resource('/applications', ApplicationController::class)
     ->middleware(['auth', 'verified', 'role:ice']);
 Route::resource('/companies', CompanyController::class)
-    ->middleware(['auth', 'verified', 'role:ice']);
+    ->middleware(['auth', 'verified', 'role:student']);
 Route::resource('/jobs', JobController::class)
-    ->middleware(['auth', 'verified', 'role:ice']);
+    ->middleware(['auth', 'verified', 'role:student']);
 Route::resource('/skills', SkillController::class)
     ->middleware(['auth', 'verified', 'role:ice']);
 Route::resource('/students', StudentController::class, ['only' => ['index', 'show']])

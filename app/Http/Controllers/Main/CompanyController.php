@@ -103,7 +103,7 @@ class CompanyController extends Controller
         $company->update($data);
 
         return redirect()
-            ->route('companies.index')
+            ->route('main.ice.dashboard')
             ->with('success', 'Company updated successfully.');
     }
 
@@ -115,7 +115,7 @@ class CompanyController extends Controller
         $company->delete();
 
         return redirect()
-            ->route('companies.index')
+            ->route('main.ice.dashboard')
             ->with('success', 'Company deleted successfully.');
     }
 }
