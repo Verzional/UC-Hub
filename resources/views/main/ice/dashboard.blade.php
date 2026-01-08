@@ -45,17 +45,35 @@
                 </div>
 
                 {{-- Top Survey Companies --}}
-                <h3 class="text-lg font-semibold text-gray-700 mb-2">Top Survey Companies</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-                    @forelse($topSurveyCompanies ?? [] as $company)
-                        @include('main.ice.partials.company-card', [
-                            'company' => $company,
-                            'isTop' => true,
-                        ])
-                    @empty
-                        <p class="text-gray-500 col-span-3">No top survey companies.</p>
-                    @endforelse
-                </div>
+<h3 class="text-lg font-semibold text-gray-700 mb-2">Top Survey Companies</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
+    @forelse($allCompanies->take(6) ?? [] as $company)
+        <div class="bg-white rounded-lg shadow p-4 flex items-center space-x-4">
+            {{-- Profile Photo --}}
+            <div class="flex-shrink-0">
+                @if($company->profile_photo_path)
+                    <img src="{{ asset('storage/' . $company->profile_photo_path) }}" 
+                        alt="{{ $company->name }}" 
+                        class="w-12 h-12 object-cover rounded-full">
+                @else
+                    <div class="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                        {{ strtoupper(substr($company->name, 0, 1)) }}
+                    </div>
+                @endif
+            </div>
+
+            {{-- Name & Industry --}}
+            <div class="flex flex-col">
+                <p class="font-semibold text-gray-800">{{ $company->name }}</p>
+                <p class="text-sm text-gray-500 mt-1">{{ $company->industry ?? 'No Industry' }}</p>
+            </div>
+        </div>
+    @empty
+        <p class="text-gray-500 col-span-3">No companies found.</p>
+    @endforelse
+</div>
+
+
 
                 {{-- All Companies --}}
                 <h3 class="text-lg font-semibold text-gray-700 mb-2">All Companies</h3>
