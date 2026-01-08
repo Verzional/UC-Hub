@@ -21,13 +21,6 @@
                     </div>
                 </div>
                 <div class="flex gap-2">
-                    <a href="{{ route('companies.edit', $company) }}"
-                        class="px-4 py-2 rounded-xl bg-yellow-500 hover:bg-yellow-600 text-white font-semibold transition duration-300 shadow-md flex items-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                        </svg>
-                        Edit
-                    </a>
                     <a href="{{ route('ice.dashboard') }}"
                         class="px-4 py-2 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold transition duration-300">
                         Back
@@ -36,16 +29,29 @@
             </div>
 
             <div class="bg-white rounded-2xl shadow-md overflow-hidden">
-                <div class="bg-gradient-to-r from-orange-500 to-orange-400 p-8">
-                    <div class="flex items-center gap-6">
+                {{-- Landscape Profile Photo Banner --}}
+                <div class="relative h-64 w-full overflow-hidden">
+                    @if ($company->profile_photo_path)
+                        <img src="{{ asset('storage/' . $company->profile_photo_path) }}" 
+                             alt="{{ $company->name }}" 
+                             class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    @else
+                        <div class="w-full h-full bg-gradient-to-r from-orange-500 to-orange-400"></div>
+                    @endif
+                    
+                    {{-- Company Info Overlay --}}
+                    <div class="absolute bottom-0 left-0 right-0 p-8">
+                        <div class="flex items-center gap-6">
                             <div class="bg-white p-4 rounded-xl shadow-lg">
                                 <svg class="w-16 h-16 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                                 </svg>
                             </div>
-                        <div class="text-white">
-                            <h4 class="text-3xl font-bold mb-2">{{ $company->name }}</h4>
-                            <p class="text-orange-100 text-lg">{{ $company->industry ?? 'N/A' }}</p>
+                            <div class="text-white">
+                                <h4 class="text-3xl font-bold mb-2">{{ $company->name }}</h4>
+                                <p class="text-orange-100 text-lg">{{ $company->industry ?? 'N/A' }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -158,18 +164,6 @@
                         @else
                             <p class="text-gray-500 text-center py-8">No jobs posted yet.</p>
                         @endif
-                    </div>
-
-                    <div class="border-t pt-6">
-                        <form method="POST" action="{{ route('companies.destroy', $company) }}">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit"
-                                class="w-full md:w-auto px-6 py-3 rounded-xl bg-red-500 hover:bg-red-600 text-white font-semibold shadow-md transition duration-300"
-                                onclick="return confirm('Are you sure you want to delete this company? This action cannot be undone.');">
-                                Delete Company
-                            </button>
-                        </form>
                     </div>
                 </div>
             </div>

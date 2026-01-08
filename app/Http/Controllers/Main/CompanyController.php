@@ -12,9 +12,27 @@ class CompanyController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $companies = Company::all();
+        $query = Company::query();
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhere('industry', 'like', "%{$search}%")
+                  ->orWhere('address', 'like', "%{$search}%");
+            });
+        }
+
+        // Filter by industry
+        if ($request->filled('filter')) {
+            $query->where('industry', $request->filter);
+        }
+
+        $companies = $query->get();
 
         return view('main.companies.index', compact('companies'));
     }
@@ -53,7 +71,7 @@ class CompanyController extends Controller
         Company::create($data);
 
         return redirect()
-            ->route('companies.index')
+            ->route('ice.dashboard')
             ->with('success', 'Company created successfully.');
     }
 
@@ -63,6 +81,11 @@ class CompanyController extends Controller
     public function show(Company $company)
     {
         $company->load('jobs');
+
+        // Check user role and return appropriate view
+        if (auth()->check() && auth()->user()->role === 'student') {
+            return view('student.companies.show', compact('company'));
+        }
 
         return view('main.companies.show', compact('company'));
     }
@@ -105,7 +128,7 @@ class CompanyController extends Controller
         $company->update($data);
 
         return redirect()
-            ->route('companies.index')
+            ->route('ice.dashboard')
             ->with('success', 'Company updated successfully.');
     }
 
@@ -117,7 +140,7 @@ class CompanyController extends Controller
         $company->delete();
 
         return redirect()
-            ->route('companies.index')
+            ->route('ice.dashboard')
             ->with('success', 'Company deleted successfully.');
     }
 }

@@ -1,14 +1,27 @@
-<x-app-layout>
+<x-ice-layout>
     <x-slot name="header">
-        <h2 class="text-xl font-semibold leading-tight text-gray-800">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Edit Job
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-            <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
+    <div class="py-10 bg-[#FFF6EE] min-h-screen">
+        <div class="max-w-4xl mx-auto px-4">
+            {{-- Header --}}
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-orange-100 p-3 rounded-xl">
+                    <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-bold text-gray-800">Edit Job</h3>
+                    <p class="text-sm text-gray-500">Update job information</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+                <div class="p-8">
                     <form
                         method="POST"
                         action="{{ route('jobs.update', $job) }}"
@@ -16,10 +29,10 @@
                         @csrf
                         @method('PUT')
 
-                        <div class="mb-4">
+                        <div class="mb-6">
                             <label
                                 for="title"
-                                class="block text-sm font-medium text-gray-700"
+                                class="block text-sm font-semibold text-gray-700 mb-2"
                             >
                                 Title
                             </label>
@@ -28,20 +41,20 @@
                                 name="title"
                                 id="title"
                                 value="{{ old('title', $job->title) }}"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                                class="w-full rounded-xl border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 focus:ring-opacity-50"
                                 required
                             />
                             @error('title')
-                                <p class="mt-1 text-xs text-red-500">
+                                <p class="mt-2 text-sm text-red-600">
                                     {{ $message }}
                                 </p>
                             @enderror
                         </div>
 
-                        <div class="mb-4">
+                        <div class="mb-6">
                             <label
                                 for="description"
-                                class="block text-sm font-medium text-gray-700"
+                                class="block text-sm font-semibold text-gray-700 mb-2"
                             >
                                 Description
                             </label>
@@ -49,22 +62,22 @@
                                 name="description"
                                 id="description"
                                 rows="4"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                                class="w-full rounded-xl border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 focus:ring-opacity-50"
                                 required
                             >
 {{ old('description', $job->description) }}</textarea
                             >
                             @error('description')
-                                <p class="mt-1 text-xs text-red-500">
+                                <p class="mt-2 text-sm text-red-600">
                                     {{ $message }}
                                 </p>
                             @enderror
                         </div>
 
-                        <div class="mb-4">
+                        <div class="mb-6">
                             <label
                                 for="location"
-                                class="block text-sm font-medium text-gray-700"
+                                class="block text-sm font-semibold text-gray-700 mb-2"
                             >
                                 Location
                             </label>
@@ -73,10 +86,10 @@
                                 name="location"
                                 id="location"
                                 value="{{ old('location', $job->location) }}"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                                class="w-full rounded-xl border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 focus:ring-opacity-50"
                             />
                             @error('location')
-                                <p class="mt-1 text-xs text-red-500">
+                                <p class="mt-2 text-sm text-red-600">
                                     {{ $message }}
                                 </p>
                             @enderror
@@ -103,7 +116,7 @@
                         >
                             <label
                                 for="company_id"
-                                class="block text-sm font-medium text-gray-700"
+                                class="block text-sm font-semibold text-gray-700 mb-2"
                             >
                                 Company
                             </label>
@@ -114,7 +127,7 @@
                                     @focus="openCompany = true"
                                     @blur="openCompany = false"
                                     placeholder="Search and select company..."
-                                    class="block w-full rounded-md border-gray-300 shadow-sm"
+                                    class="w-full rounded-xl border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 focus:ring-opacity-50"
                                     required
                                 />
                                 <ul
@@ -144,23 +157,23 @@
                                 x-model="selectedCompany"
                             />
                             @error('company_id')
-                                <p class="mt-1 text-xs text-red-500">
+                                <p class="mt-2 text-sm text-red-600">
                                     {{ $message }}
                                 </p>
                             @enderror
                         </div>
 
-                        <div class="mb-4">
+                        <div class="mb-6">
                             <label
                                 for="employment_type"
-                                class="block text-sm font-medium text-gray-700"
+                                class="block text-sm font-semibold text-gray-700 mb-2"
                             >
                                 Employment Type
                             </label>
                             <select
                                 name="employment_type"
                                 id="employment_type"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                                class="w-full rounded-xl border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 focus:ring-opacity-50"
                             >
                                 <option value="">Select Type</option>
                                 <option
@@ -189,16 +202,16 @@
                                 </option>
                             </select>
                             @error('employment_type')
-                                <p class="mt-1 text-xs text-red-500">
+                                <p class="mt-2 text-sm text-red-600">
                                     {{ $message }}
                                 </p>
                             @enderror
                         </div>
 
-                        <div class="mb-4">
+                        <div class="mb-6">
                             <label
                                 for="salary"
-                                class="block text-sm font-medium text-gray-700"
+                                class="block text-sm font-semibold text-gray-700 mb-2"
                             >
                                 Salary
                             </label>
@@ -207,19 +220,19 @@
                                 name="salary"
                                 id="salary"
                                 value="{{ old('salary', $job->salary) }}"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                                class="w-full rounded-xl border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 focus:ring-opacity-50"
                             />
                             @error('salary')
-                                <p class="mt-1 text-xs text-red-500">
+                                <p class="mt-2 text-sm text-red-600">
                                     {{ $message }}
                                 </p>
                             @enderror
                         </div>
 
-                        <div class="mb-4">
+                        <div class="mb-6">
                             <label
                                 for="application_deadline"
-                                class="block text-sm font-medium text-gray-700"
+                                class="block text-sm font-semibold text-gray-700 mb-2"
                             >
                                 Application Deadline
                             </label>
@@ -228,19 +241,19 @@
                                 name="application_deadline"
                                 id="application_deadline"
                                 value="{{ old('application_deadline', $job->application_deadline ? \Carbon\Carbon::parse($job->application_deadline)->format('Y-m-d') : '') }}"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                                class="w-full rounded-xl border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 focus:ring-opacity-50"
                             />
                             @error('application_deadline')
-                                <p class="mt-1 text-xs text-red-500">
+                                <p class="mt-2 text-sm text-red-600">
                                     {{ $message }}
                                 </p>
                             @enderror
                         </div>
 
-                        <div class="mb-4">
+                        <div class="mb-6">
                             <label
                                 for="start_time"
-                                class="block text-sm font-medium text-gray-700"
+                                class="block text-sm font-semibold text-gray-700 mb-2"
                             >
                                 Start Time
                             </label>
@@ -249,19 +262,19 @@
                                 name="start_time"
                                 id="start_time"
                                 value="{{ old('start_time', $job->start_time ? substr($job->start_time, 0, 5) : '') }}"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                                class="w-full rounded-xl border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 focus:ring-opacity-50"
                             />
                             @error('start_time')
-                                <p class="mt-1 text-xs text-red-500">
+                                <p class="mt-2 text-sm text-red-600">
                                     {{ $message }}
                                 </p>
                             @enderror
                         </div>
 
-                        <div class="mb-4">
+                        <div class="mb-6">
                             <label
                                 for="end_time"
-                                class="block text-sm font-medium text-gray-700"
+                                class="block text-sm font-semibold text-gray-700 mb-2"
                             >
                                 End Time
                             </label>
@@ -270,10 +283,10 @@
                                 name="end_time"
                                 id="end_time"
                                 value="{{ old('end_time', $job->end_time ? substr($job->end_time, 0, 5) : '') }}"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                                class="w-full rounded-xl border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 focus:ring-opacity-50"
                             />
                             @error('end_time')
-                                <p class="mt-1 text-xs text-red-500">
+                                <p class="mt-2 text-sm text-red-600">
                                     {{ $message }}
                                 </p>
                             @enderror
@@ -300,7 +313,7 @@
                             }"
                         >
                             <label
-                                class="block text-sm font-medium text-gray-700"
+                                class="block text-sm font-semibold text-gray-700 mb-2"
                             >
                                 Skills
                             </label>
@@ -316,7 +329,7 @@
                                             @focus="openSkills[index] = true"
                                             @blur="openSkills[index] = false"
                                             placeholder="Search and select skill..."
-                                            class="block w-full rounded-md border-gray-300 shadow-sm"
+                                            class="w-full rounded-xl border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 focus:ring-opacity-50"
                                         />
                                         <ul
                                             x-show="openSkills[index]"
@@ -350,7 +363,7 @@
                                         type="button"
                                         @click="skills.splice(index, 1); searchSkills.splice(index, 1); openSkills.splice(index, 1)"
                                         x-show="skills.length > 1"
-                                        class="mt-1 rounded bg-red-500 px-2 py-1 text-xs text-white hover:bg-red-700"
+                                        class="mt-1 px-2 py-1 rounded-lg bg-red-500 hover:bg-red-600 text-white text-xs font-medium transition duration-300"
                                     >
                                         Remove
                                     </button>
@@ -359,27 +372,27 @@
                             <button
                                 type="button"
                                 @click="skills.push(''); searchSkills.push(''); openSkills.push(false)"
-                                class="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
+                                class="px-4 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-semibold transition duration-300"
                             >
                                 Add Skill
                             </button>
                             @error('skills')
-                                <p class="mt-1 text-xs text-red-500">
+                                <p class="mt-2 text-sm text-red-600">
                                     {{ $message }}
                                 </p>
                             @enderror
                         </div>
 
-                        <div class="flex items-center justify-end">
+                        <div class="flex items-center justify-end gap-3 pt-4">
                             <a
-                                href="{{ route('jobs.index') }}"
-                                class="mr-2 rounded bg-gray-300 px-4 py-2 font-bold text-gray-800 hover:bg-gray-400"
+                                href="{{ route('ice.dashboard') }}"
+                                class="px-6 py-3 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold transition duration-300"
                             >
                                 Cancel
                             </a>
                             <button
                                 type="submit"
-                                class="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+                                class="px-6 py-3 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-semibold shadow-md transition duration-300"
                             >
                                 Update Job
                             </button>
@@ -389,4 +402,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+</x-ice-layout>

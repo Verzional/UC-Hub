@@ -22,6 +22,9 @@ class DatabaseSeeder extends Seeder
             SkillSeeder::class,
             CompanySeeder::class,
             JobSeeder::class,
+            UserSeeder::class,
+            StudentDataSeeder::class,
+            SurveySeeder::class,
         ]);
 
         // User::factory(10)->create();

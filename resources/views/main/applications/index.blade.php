@@ -19,6 +19,25 @@
                         </a>
                     </div>
 
+                    {{-- Search Bar --}}
+                    <div class="mb-6">
+                        <x-searchbar 
+                            placeholder="Search by student name, email, job, or company..." 
+                            :action="route('applications.index')"
+                            :value="request('search')"
+                            :filters="[
+                                'label' => 'statuses',
+                                'options' => [
+                                    'pending' => 'Pending',
+                                    'reviewing' => 'Reviewing',
+                                    'accepted' => 'Accepted',
+                                    'rejected' => 'Rejected'
+                                ]
+                            ]"
+                            :selectedFilter="request('filter')"
+                        />
+                    </div>
+
                     @if (session('success'))
                         <div
                             class="mb-4 rounded border border-green-400 bg-green-100 px-4 py-3 text-green-700"

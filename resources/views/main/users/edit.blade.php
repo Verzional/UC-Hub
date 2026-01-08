@@ -11,7 +11,7 @@
                 <div class="p-6 text-gray-900">
                     <form
                         method="POST"
-                        action="{{ route('users.update', $user) }}"
+                        action="{{ route('admin.users.update', $user) }}"
                         enctype="multipart/form-data"
                     >
                         @csrf
@@ -319,7 +319,7 @@
 
                         <div class="flex items-center justify-end">
                             <a
-                                href="{{ route('users.index') }}"
+                                href="{{ route('admin.users.index') }}"
                                 class="mr-2 rounded bg-gray-300 px-4 py-2 font-bold text-gray-800 hover:bg-gray-400"
                             >
                                 Cancel

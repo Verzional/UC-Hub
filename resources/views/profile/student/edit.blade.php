@@ -119,6 +119,59 @@
                 </form>
             </div>
 
+            {{-- SKILLS --}}
+            <div class="bg-white rounded-2xl shadow p-6">
+                <h3 class="text-lg font-semibold mb-4">Skills</h3>
+                
+                @if(session('success'))
+                    <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                <form action="{{ route('profile.update.skills') }}" method="POST">
+                    @csrf
+
+                    <div class="mb-4">
+                        <p class="text-sm text-gray-600 mb-3">Select skills that you have. These help us recommend better job matches for you.</p>
+                        
+                        @php
+                            $groupedSkills = $allSkills->groupBy('industry');
+                            $userSkillIds = $userSkills->pluck('id')->toArray();
+                        @endphp
+
+                        <div class="space-y-6">
+                            @foreach($groupedSkills as $industry => $skills)
+                                <div>
+                                    <h4 class="font-semibold text-gray-700 mb-3 text-sm uppercase tracking-wide">{{ $industry }}</h4>
+                                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                                        @foreach($skills as $skill)
+                                            <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-orange-50 hover:border-orange-400 transition {{ in_array($skill->id, $userSkillIds) ? 'bg-orange-50 border-orange-400' : 'border-gray-200' }}">
+                                                <input type="checkbox" 
+                                                    name="skills[]" 
+                                                    value="{{ $skill->id }}"
+                                                    {{ in_array($skill->id, $userSkillIds) ? 'checked' : '' }}
+                                                    class="rounded border-gray-300 text-orange-500 focus:ring-orange-500">
+                                                <span class="ml-2 text-sm text-gray-700">{{ $skill->name }}</span>
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-4">
+                        <p class="text-sm text-gray-500">
+                            <strong>{{ count($userSkillIds) }}</strong> skill(s) selected
+                        </p>
+                        <button type="submit"
+                            class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-full text-sm font-medium">
+                            Save Skills
+                        </button>
+                    </div>
+                </form>
+            </div>
 
             <div class="bg-white p-6 rounded-2xl shadow space-y-6">
                 <h3 class="text-lg font-semibold">Portfolio & CV</h3>
@@ -193,29 +246,6 @@
                     </div>
                 </form>
             </div>
-
-
-            {{-- ABOUT YOU --}}
-            <div class="bg-white rounded-2xl shadow p-6">
-                <h3 class="text-lg font-semibold mb-3">Account Information</h3>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                    <div>
-                        <p class="text-gray-500">Created At</p>
-                        <p class="text-gray-900">
-                            {{ $user->created_at->format('M d, Y') }}
-                        </p>
-                    </div>
-
-                    <div>
-                        <p class="text-gray-500">Last Updated</p>
-                        <p class="text-gray-900">
-                            {{ $user->updated_at->format('M d, Y') }}
-                        </p>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </div>
 </x-app-layout>

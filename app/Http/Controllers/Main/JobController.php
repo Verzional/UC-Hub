@@ -13,9 +13,29 @@ class JobController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $jobs = Job::with('company')->get();
+        $query = Job::with('company');
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhere('location', 'like', "%{$search}%")
+                  ->orWhereHas('company', function($q) use ($search) {
+                      $q->where('name', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        // Filter by employment type
+        if ($request->filled('filter')) {
+            $query->where('employment_type', $request->filter);
+        }
+
+        $jobs = $query->get();
 
         return view('main.jobs.index', compact('jobs'));
     }
@@ -57,7 +77,7 @@ class JobController extends Controller
         }
 
         return redirect()
-            ->route('jobs.index')
+            ->route('ice.dashboard')
             ->with('success', 'Job created successfully.');
     }
 
@@ -106,7 +126,7 @@ class JobController extends Controller
         $job->skills()->sync($request->skills ?? []);
 
         return redirect()
-            ->route('jobs.index')
+            ->route('ice.dashboard')
             ->with('success', 'Job updated successfully.');
     }
 
@@ -118,7 +138,7 @@ class JobController extends Controller
         $job->delete();
 
         return redirect()
-            ->route('jobs.index')
+            ->route('ice.dashboard')
             ->with('success', 'Job deleted successfully.');
     }
 }

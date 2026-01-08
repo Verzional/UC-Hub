@@ -19,12 +19,16 @@ class ProfileController extends Controller
     public function edit(Request $request): View
     {
         $user = $request->user();
+        
+        // Load user skills and all available skills
+        $userSkills = $user->skills;
+        $allSkills = \App\Models\Skill::orderBy('name')->get();
 
     if ($user->role === 'ICE') {
         return view('profile.ice.edit', compact('user'));
     }
 
-    return view('profile.student.edit', compact('user'));
+    return view('profile.student.edit', compact('user', 'userSkills', 'allSkills'));
     }
 
     /**
@@ -90,5 +94,20 @@ class ProfileController extends Controller
         $user->save();
 
         return back()->with('success', 'Profile updated');
+    }
+
+    public function updateSkills(Request $request)
+    {
+        $request->validate([
+            'skills' => 'nullable|array',
+            'skills.*' => 'exists:skills,id',
+        ]);
+
+        $user = $request->user();
+        
+        // Sync the skills (this will add new ones and remove unchecked ones)
+        $user->skills()->sync($request->input('skills', []));
+
+        return back()->with('success', 'Skills updated successfully!');
     }
 }

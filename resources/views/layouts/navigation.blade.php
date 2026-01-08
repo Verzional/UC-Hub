@@ -11,16 +11,8 @@
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    @if (Auth::user()->role === 'Admin')
-                        <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
-                            Dashboard
-                        </x-nav-link>
-
-                        <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
-                            Users
-                        </x-nav-link>
-                    @elseif (Auth::user()->role === 'ice')
+                <div class="space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    @if (Auth::user()->role === 'admin')
                         <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
                             Dashboard
                         </x-nav-link>
@@ -53,7 +45,7 @@
                             Dashboard
                         </x-nav-link>
 
-                        <x-nav-link :href="route('jobs.index')" :active="request()->routeIs('jobs.*')">
+                        <x-nav-link :href="route('student.jobs.index')" :active="request()->routeIs('student.jobs.*')">
                             Jobs
                         </x-nav-link>
                     @endif
