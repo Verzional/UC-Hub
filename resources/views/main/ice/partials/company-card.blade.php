@@ -25,13 +25,16 @@
         <span class="text-xs text-gray-500">
             📍 {{ $company?->address ?? 'Unknown location' }}
         </span>
+            @if($company)
+                <a
+                    href="{{ route('companies.show', $company) }}"
+                    class="text-sm font-medium text-orange-600 hover:underline"
+                >
+                    View →
+                </a>
+            @else
+                <span class="text-sm text-gray-400">No link</span>
+            @endif
 
-        @if($company)
-            <a href="#" class="text-sm font-medium text-orange-600 hover:underline">
-                View →
-            </a>
-        @else
-            <span class="text-sm text-gray-400">No link</span>
-        @endif
     </div>
 </div>
