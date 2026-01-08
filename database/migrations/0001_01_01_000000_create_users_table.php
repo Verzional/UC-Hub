@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('profile_photo_path', 2048)->nullable();
             $table->string('cv_path', 2048)->nullable();
             $table->string('portfolio_path', 2048)->nullable();
+            $table->text('about')->nullable();
             $table->string('role')->default('student');
             $table->rememberToken();
             $table->timestamps();

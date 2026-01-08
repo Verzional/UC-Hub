@@ -29,6 +29,7 @@ class User extends Authenticatable
         'phone_number',
         'cohort_year',
         'major',
+        'about',
         'profile_photo_path',
         'cv_path',
         'portfolio_path',

@@ -18,7 +18,11 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     $user = request()->user();
 
-    if (!$user->survey) {
+    if ($user->role === 'Admin') {
+        return redirect()->route('admin.dashboard');
+    }
+
+    if ($user->role === 'Student' && !$user->survey) {
         return redirect()->route('surveys.create');
     }
     return view('dashboard');
@@ -36,7 +40,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/survey', [SurveyController::class, 'create'])->name('surveys.create');
     Route::post('/survey', [SurveyController::class, 'store'])->name('surveys.store');
+    Route::patch('/profile/extra', [ProfileController::class, 'updateExtra'])
+    ->name('profile.update.extra');
+
 });
+
 
 // Resource Routes
 Route::resource('/applications', ApplicationController::class)

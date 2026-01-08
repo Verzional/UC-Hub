@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\ProfileExtraUpdateRequest;
 
 class ProfileController extends Controller
 {
@@ -26,13 +28,16 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        $user->fill($request->validated());
+
+        // Reset email verification if email changed
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
         }
 
-        $request->user()->save();
+        $user->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
@@ -56,5 +61,30 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function updateExtra(ProfileExtraUpdateRequest $request)
+    {
+        $user = $request->user();
+
+        if ($request->filled('about')) {
+            $user->about = $request->about;
+        }
+
+        if ($request->filled('portfolio_path')) {
+            $user->portfolio_path = $request->portfolio_path;
+        }
+
+        if ($request->hasFile('cv_path')) {
+            if ($user->cv_path) {
+                Storage::disk('public')->delete($user->cv_path);
+            }
+
+            $user->cv_path = $request->file('cv_path')->store('cvs', 'public');
+        }
+
+        $user->save();
+
+        return back()->with('success', 'Profile updated');
     }
 }
