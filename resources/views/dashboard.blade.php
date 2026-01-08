@@ -101,7 +101,7 @@
                                 ];
                             @endphp
 
-                            <div class="flex justify-between items-start border rounded-xl p-4 hover:border-orange-300 transition">
+                            <a href="{{ route('student.applications.show', $application) }}" class="block border rounded-xl p-4 hover:border-orange-400 hover:bg-orange-50 transition cursor-pointer">
                                 <div class="flex-1">
                                     <div class="flex items-start justify-between mb-2">
                                         <h4 class="font-medium text-gray-800">
@@ -139,7 +139,7 @@
                                         </div>
                                     @endif
                                 </div>
-                            </div>
+                            </a>
                         @endforeach
                     </div>
                 @else

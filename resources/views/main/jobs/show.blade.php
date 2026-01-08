@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-ice-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Job Details
@@ -8,18 +8,7 @@
     <div class="py-10 bg-[#FFF6EE] min-h-screen">
         <div class="max-w-5xl mx-auto px-4">
             {{-- Header with Actions --}}
-            <div class="flex items-center justify-between mb-6">
-                <div class="flex items-center gap-3">
-                    <div class="bg-orange-100 p-3 rounded-xl">
-                        <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="text-2xl font-bold text-gray-800">{{ $job->title }}</h3>
-                        <p class="text-sm text-gray-500">Job Details</p>
-                    </div>
-                </div>
+            <div class="flex items-center justify-end mb-6">
                 <div class="flex gap-2">
                     <a href="{{ route('recommend.students', $job) }}"
                         class="px-4 py-2 rounded-xl bg-purple-500 hover:bg-purple-600 text-white font-semibold transition duration-300 shadow-md flex items-center gap-2">
@@ -321,4 +310,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+</x-ice-layout>

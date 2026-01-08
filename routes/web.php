@@ -36,7 +36,7 @@ Route::get('/dashboard', function () {
 
     // Load applications with job and company data for students
     $applications = collect();
-    if ($user->role === 'Student') {
+    if ($user->role === 'student') {
         $applications = $user->applications()
             ->with(['job.company', 'job.skills'])
             ->orderBy('created_at', 'desc')
@@ -84,6 +84,7 @@ Route::prefix('student')->name('student.')->middleware(['auth', 'verified', 'rol
     Route::get('/jobs/{job}', [JobRecommendationController::class, 'show'])->name('jobs.show');
     Route::post('/jobs/{job}/apply', [JobRecommendationController::class, 'apply'])->name('jobs.apply');
     Route::get('/companies/{company}', [CompanyController::class, 'show'])->name('companies.show');
+    Route::get('/applications/{application}', [ApplicationController::class, 'show'])->name('applications.show');
 });
 
 // Admin Routes
